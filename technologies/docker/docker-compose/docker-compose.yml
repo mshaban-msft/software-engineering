@@ -1,0 +1,40 @@
+version: "3"
+
+services:
+
+    # frontend service
+    frontend:
+        build: ./frontend
+        volumes:
+            - ./frontend/code:/user/src/app
+        ports:
+            - 8000:80
+        depends_on: 
+            - backend
+            - storage
+
+    # backend service
+    backend:
+        build: ./backend
+        volumes:
+            - ./backend/code:/user/src/app
+        depends_on: 
+            - database
+
+    # database service
+    database:
+        build: ./database
+        volumes:
+            - ./database:/user/src/app
+        ports:
+            - 8002:80
+
+    # storage service
+    storage:
+        build: ./storage
+        volumes:
+            - ./storage/files:/user/src/app
+        ports:
+            - 8001:80
+
+    

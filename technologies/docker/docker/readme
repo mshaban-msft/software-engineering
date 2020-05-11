@@ -1,0 +1,178 @@
+#####################################################
+>> STRUCTURE
+#####################################################
+>> Dockerfile -> Image -> Container
+
+Dockerfile
+Image
+Container
+Volume
+Network
+
+#####################################################
+>> CREATE IMAGES
+#####################################################
+1) Dockerfile
+    - FROM ubuntu                                           [select base image]
+    - WORKDIR /shaban/Desktop/                              [select working directory]
+    - RUN apt-get install -y git                            [run linux command (install env dependencies)]
+    - ENV myName="John Doe"                                 [environment variables]
+    - COPY /code /var/usr/code                              [copy files into image]
+    
+    >> run process (CMD)
+    - CMD ["sleep", "5"]                                    [define process to run when container starts][containers run processes not OSes]
+    - ex: docker run myImage                                [will run image with the 'CMD sleep 5']
+    - ex: docker run myImage python -m SimpleHTTPServer     [overwrite CMD args]
+
+    >> run process (ENTRYPOINT)
+    - ENTRYPOINT ["sleep"]                                  [append command to container so you won't have to write it everytime you run container]
+    - ex: docker run myImage 5                              [equivalent: docker run myImage sleep + 5]
+    - CMD ["5"]                                             [provide default value for 'sleep' when user doesn't present it]
+
+
+2) build Dockerfile
+    - docker build [dockerfile dir] -t [image tag]
+    - docker build Dockerfile -t shaban/my-custom-app
+
+3) push image to dockerhub
+    - docker push [image]
+    - docker push shaban/my-custom-app
+
+4) pull image
+    - docker pull [image name]
+
+
+#####################################################
+>> COMMANDS
+#####################################################
+1) LIST CONTAINERS
+    - docker ps
+    - docker ps -a
+
+2) LIST IMAGES
+    - docker images
+
+3) DELETE CONTAINER
+    - docker rm [container id/name]
+
+4) DELETE IMAGE
+    - docker rmi [image name/id]
+
+5) INSPECT CONTAINER
+    - docker inspect container_name
+
+
+#####################################################
+>> RUNNING CONTAINERS
+#####################################################
+1) RUN IMAGE/CONTAINER
+    > docker run [image/container name] [command to execute]
+        - docker run ubuntu sleep 5
+    > detached mode
+        - docker run -d [image/container name]
+    > reattach
+        - docker attach [container id]
+    > specific version
+        - docker run [image:version]
+        - docker run redis:4.0
+
+2) Naming Image
+    - naming container is important
+    - ex: use name in DNS resolving
+    - docker run --name="mysql"
+
+2) RUN COMMAND ON RUNNING CONTAINER
+    - docker exec [container] [command]
+
+3) STOP RUNNING CONTAINER
+    - docker stop [container id/name]
+
+3) STOP ALL RUNNING CONTAINERS
+    - docker stop $(docker ps -a -q)
+    - docker rm $(docker ps -a -q)
+
+3) STOP -IT CONTAINER
+    - Ctr-p then Ctr-q
+
+4) ASSIGN VOLUME
+    - docker run [-v host:container] image
+    - docker run -v /code:/var/lib/mysql mysql
+
+5) ASSIGN PORTS
+    - docker run [-p host:container] image
+    - docker run -p 80:8000 redis
+
+6) ADD ENV VARIABLE
+    - docker run [-e VARIABLE=value] image
+    - docker run -e APP_COLOR=red ubuntu 
+
+7) ADD NETWORK
+    - docker run [--network=network_name] image
+    - docker run --network=host ubuntu 
+
+
+#####################################################
+>> NETWORKS
+#####################################################
+> network types
+    - bridge
+    - host
+    - none
+
+> bridge
+    - 172.17.0.2
+    - internal network created by docker for containers
+    - command
+        - docker run image
+    - access container
+        - from host
+            - 172.17.0.X:8000
+            - or port mapping (80:8000)
+                - localhost:80
+        - from outside world
+            - port mapping
+
+> host
+    - localhost
+    - docker run --network=host image
+    - access container
+        - localhost:8000
+
+> none
+    - docker run --network=none image
+    - if you dont want to assign ports
+
+> custom bridge
+    > create network
+    - docker network create --driver bridge --subnet 182.11.0.0/16 my-custom-network
+    > use in container
+    - docker run  --network=my-custom-network image
+
+> DNS RESOLVING (connect containers)
+    - scenario
+        - laravel, mysql containers
+    - config file of laravel
+        - MYSQL-HOST=172.17.0.3 (NOT IDEAL!!)
+        - MYSQL-HOST=CONTAINER_NAME (mysql)
+
+
+
+#####################################################
+>> INPUT/OUTPUT
+#####################################################
+> assume you created an application that reads user input and displays output
+    - example: python app to read user name, and display wolcome
+    - name = input()
+    - print("w3lcome, " + name)
+
+> assume you want to run it in a docker container
+    - how would you attach cli to input/output
+
+> command
+    - docker run -it container
+
+> other commands
+    - docker run -i image
+        - attach host input to container
+    - docker run -t image
+        - attach host output to container
