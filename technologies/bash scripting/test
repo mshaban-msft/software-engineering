@@ -1,0 +1,79 @@
+###########################################################
+						BASH SCRIPTING
+###########################################################
+
+#####################
+programming language
+#####################
+1) datatypes
+	- variables
+	- types
+	- operators
+2) data structures
+3) control
+	- control
+	- looping
+	- exceptions
+	- functions
+4) OOP
+	- classes
+	- inheritance
+
+#####################
+file system
+#####################
+1) files and directory
+	- make
+	- delete
+	- copy
+	- move
+2) permissions
+	- read, write, execute
+	- groups and users
+3) edit files
+	- nano
+	- vim
+
+#####################
+i/o
+#####################
+1) user input
+	- output: print
+	- input: prompt
+	- automate response to prompts
+2) files
+	- read files into variables
+	- write to files
+3) pipes and filters
+
+#####################
+threading
+#####################
+- spawn
+- join
+
+
+#####################
+environment
+#####################
+1) variables
+	- make, update, delete
+2) software management
+	- install
+	- remove
+
+
+
+
+
+
+
+
+
+
+#####################
+process management
+#####################
+- spawn
+- fork
+- kill
