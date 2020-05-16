@@ -6,9 +6,10 @@
 Dockerfile
 Image
 Container
+
 Volume
 Network
-
+Port
 
 
 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -73,11 +74,6 @@ https://docs.docker.com/engine/install/linux-postinstall/
 <<<<<<<<<<<<<<<<<<<<<<<<
 sudo chmod -R 777 ./code
 <<<<<<<<<<<<<<<<<<<<<<<<
-
-> stop and remove all containers
-docker stop $(docker ps -a -q)
-docker rm $(docker ps -a -q)
-
 
 #####################################################
 >> RUNNING CONTAINERS
@@ -193,3 +189,15 @@ docker rm $(docker ps -a -q)
         - attach host input to container
     - docker run -t image
         - attach host output to container
+
+
+
+#####################################################
+>> VOLUMES
+#####################################################
+docker voulme 			        []
+docker voulme create		    [create volume]
+docker voulme ls		        [list volumes]
+docker voulme inspect		    []
+docker voulme rm		        [remove volume]
+docker voulme prune		        [remove unused volumes]
