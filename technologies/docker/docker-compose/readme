@@ -1,0 +1,79 @@
+#####################################################
+>> COMMANDS
+#####################################################
+>> build environment
+    - docker-compose build
+
+>> run env
+    - docker-compose up [-d: for detached mode]
+
+>> run service like "php composer"
+    - docker-compose run --rm composer init
+
+
+
+#####################################################
+>> docker-compose.yml
+#####################################################
+1) version
+
+2) network
+
+3) services
+
+4) container/service
+    ---------------------------
+    > source image
+    ---------------------------
+    - source image to build service
+    - can either be image or Dockerfile
+    > examples:
+
+    image: node
+    build:
+        context: /directory/of/Dockerfile
+        dockerfile: Dockerfile
+
+    ---------------------------
+    > container name
+    ---------------------------
+    - naming your container, instead of default name by docker
+    - helps in networking. ex: refer to mysql server in laravel .env file
+    > examples:
+
+    container_name: mysql
+
+    ---------------------------
+    > volumes
+    ---------------------------
+    volumes:
+        - host:container
+        - ./code:/var/www/html
+        - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf
+
+    ---------------------------
+    > ports
+    ---------------------------
+    ports:
+        - host:container
+        - 8000:80
+
+    ---------------------------
+    > network
+    ---------------------------
+    - what network to attach container to
+    > examples:
+
+    network:
+        - my-app
+
+    ---------------------------
+    > depends on
+    ---------------------------
+    - services that must be run before this container
+    - ex: Artisan container needs mysql to run migrations
+    > examples:
+    
+    depends_on:
+        - php
+        - mysql

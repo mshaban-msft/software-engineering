@@ -1,0 +1,107 @@
+version: "3"
+
+####################################
+# application network
+####################################
+networks:
+  laravel:
+
+
+####################################
+# services
+####################################
+services:
+  
+  ####################################
+  # web server
+  ####################################
+  nginx:
+    image: nginx
+    container_name: nginx
+    ports:
+      - "8080:80"
+    volumes:
+      - ./code:/var/www/html
+      - ./configs/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - php
+      - mysql
+    networks:
+      - laravel
+
+  ####################################
+  # php interpreter
+  ####################################
+  php:
+    build:
+      context: ./configs/php
+      dockerfile: Dockerfile
+    container_name: php
+    volumes:
+      - ./code:/var/www/html
+    ports:
+      - "9000:9000"
+    networks:
+      - laravel
+
+  ####################################
+  # mysql server
+  ####################################
+  mysql:
+    image: mysql
+    container_name: mysql
+    restart: unless-stopped
+    tty: true
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - laravel
+
+  ####################################
+  # composer - pkg manager
+  ####################################
+  composer:
+    image: composer
+    container_name: composer
+    volumes:
+      - ./code:/var/www/html
+    working_dir: /var/www/html
+    depends_on:
+      - php
+    networks:
+      - laravel
+
+  ####################################
+  # npm
+  ####################################
+  npm:
+    image: node
+    container_name: npm
+    volumes:
+      - ./code:/var/www/html
+    working_dir: /var/www/html
+    entrypoint: ["npm"]
+
+  ####################################
+  # artisan
+  ####################################
+  artisan:
+    build:
+      context: ./configs/php
+      dockerfile: Dockerfile
+    container_name: artisan
+    volumes:
+      - ./code:/var/www/html
+    depends_on:
+      - mysql
+    working_dir: /var/www/html
+    entrypoint: ["php", "/var/www/html/artisan"]
+    networks:
+      - laravel

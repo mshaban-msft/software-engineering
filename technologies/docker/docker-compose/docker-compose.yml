@@ -1,40 +1,56 @@
 version: "3"
 
+####################################
+# application network
+####################################
+networks:
+  laravel:
+
+
+####################################
+# services
+####################################
 services:
+  
+  ####################################
+  # service 1
+  ####################################
+  some-service:
+    # source
+    image: nginx
+    build:
+      context: ./configs/php
+      dockerfile: Dockerfile
+    # name
+    container_name: php
+    # volumes
+    volumes:
+      - ./code/backend:/var/www/html
+      - ./code:/var/www/html2
+    # ports
+    ports:
+      - "9000:9000"
+      - "8000:80"
+    # network
+    networks:
+      - laravel
+    # depends on
+    depends_on:
+      - php
+    # more
+    working_dir: /var/www/html
+    entrypoint: ["php", "/var/www/html/artisan"]
 
-    # frontend service
-    frontend:
-        build: ./frontend
-        volumes:
-            - ./frontend/code:/user/src/app
-        ports:
-            - 8000:80
-        depends_on: 
-            - backend
-            - storage
-
-    # backend service
-    backend:
-        build: ./backend
-        volumes:
-            - ./backend/code:/user/src/app
-        depends_on: 
-            - database
-
-    # database service
-    database:
-        build: ./database
-        volumes:
-            - ./database:/user/src/app
-        ports:
-            - 8002:80
-
-    # storage service
-    storage:
-        build: ./storage
-        volumes:
-            - ./storage/files:/user/src/app
-        ports:
-            - 8001:80
-
-    
+  ####################################
+  # service 2
+  ####################################
+  mysql:
+    restart: unless-stopped
+    tty: true
+    environment:
+      MYSQL_DATABASE: homestead
+      MYSQL_USER: homestead
+      MYSQL_PASSWORD: secret
+      MYSQL_ROOT_PASSWORD: secret
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
