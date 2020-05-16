@@ -9,6 +9,14 @@ Container
 Volume
 Network
 
+
+
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+post install
+https://docs.docker.com/engine/install/linux-postinstall/
+>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+
 #####################################################
 >> CREATE IMAGES
 #####################################################
@@ -60,6 +68,15 @@ Network
 
 5) INSPECT CONTAINER
     - docker inspect container_name
+
+
+<<<<<<<<<<<<<<<<<<<<<<<<
+sudo chmod -R 777 ./code
+<<<<<<<<<<<<<<<<<<<<<<<<
+
+> stop and remove all containers
+docker stop $(docker ps -a -q)
+docker rm $(docker ps -a -q)
 
 
 #####################################################

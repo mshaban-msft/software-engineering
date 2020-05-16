@@ -1,4 +1,12 @@
 #####################################################
+>> TUTORIALS
+#####################################################
+https://www.youtube.com/watch?v=5N6gTVCG_rw
+https://www.youtube.com/watch?v=I980aPL-NRM
+
+
+
+#####################################################
 >> COMMANDS
 #####################################################
 >> build environment
@@ -7,9 +15,11 @@
 >> run env
     - docker-compose up [-d: for detached mode]
 
+>> stop env
+    - docker-compose down
+
 >> run service like "php composer"
     - docker-compose run --rm composer init
-
 
 
 #####################################################
